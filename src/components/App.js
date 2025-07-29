@@ -1,20 +1,18 @@
-import React, { useState } from "react";
-import ShoppingList from "./ShoppingList";
-import Header from "./Header";
+import React, { useEffect, useState } from "react";
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [image, setImage] = useState(null);
 
-  function handleDarkModeClick() {
-    setIsDarkMode((isDarkMode) => !isDarkMode);
-  }
+  useEffect(() => {
+    fetch("https://dog.ceo/api/breeds/image/random")
+      .then((r) => r.json())
+      .then((data) => setImage(data.message));
+  }, []);
 
-  return (
-    <div className={"App " + (isDarkMode ? "dark" : "light")}>
-      <Header isDarkMode={isDarkMode} onDarkModeClick={handleDarkModeClick} />
-      <ShoppingList />
-    </div>
-  );
+  if (!image) return <p>Loading...</p>;
+
+  return <img src={image} alt="A Random Dog" />;
 }
 
 export default App;
+
